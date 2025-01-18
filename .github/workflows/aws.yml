@@ -12,7 +12,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: 643212820363.dkr.ecr.us-east-1.amazonaws.com/github:latest
 
       - name: Log in to Amazon ECR
         uses: aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 643212820363.dkr.ecr.us-east-1.amazonaws.com
