@@ -1,27 +1,39 @@
-name: Build and Push Docker Image to ECR
+name: Deploy to ECR
 
 on:
   push:
     branches:
-      - main  # Trigger the workflow on pushes to the main branch
-  workflow_dispatch:  # Allows manual triggering of the workflow
+      - main  # Adjust to your branch for deployment
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: ./Dockerfile
+      # Checkout the repository
+      - name: Checkout Code
+        uses: actions/checkout@v3
 
+      # Set up AWS credentials
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1  # Adjust your region
+
+      # Log in to Amazon ECR
       - name: Log in to Amazon ECR
-        uses: aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 643212820363.dkr.ecr.us-east-1.amazonaws.com
-
-      - name: Build Docker image
         run: |
-          docker build -t github .
-          docker tag github:latest 643212820363.dkr.ecr.us-east-1.amazonaws.com/github:latest
+          aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 655522631902.dkr.ecr.us-east-1.amazonaws.com
 
-      - name: Push Docker image to ECR
+      # Build and tag the Docker image
+      - name: Build Docker Image
         run: |
-          docker push 643212820363.dkr.ecr.us-east-1.amazonaws.com/github:latest
+          docker build -t github:latest .
+          docker tag github:latest ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-1.amazonaws.com/github:latest
+
+      # Push the image to ECR
+      - name: Push to ECR
+        run: |
+          docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-1.amazonaws.com/github:latest
