@@ -9,10 +9,10 @@ phases:
     commands:
       - echo Starting build at `date`
       - echo Building the Docker image...          
-      - docker build -t github:latest .
-      - docker tag github:latest 655522631902.dkr.ecr.us-east-1.amazonaws.com/github:latest      
+      - docker build -t github1:latest .
+      - docker tag github:latest 655522631902.dkr.ecr.us-east-1.amazonaws.com/github1:latest      
   post_build:
     commands:
       - echo Completed build at `date`
       - echo Pushing the Docker image...
-      - docker push 655522631902.dkr.ecr.us-east-1.amazonaws.com/github:latest
+      - docker push 655522631902.dkr.ecr.us-east-1.amazonaws.com/github1:latest
