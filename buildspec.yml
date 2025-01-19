@@ -19,31 +19,28 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}  # Use GitHub Secrets for security
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}  # Use GitHub Secrets for security
+           aws-access-key-id: AKIAZRIBRSDPJCFSA24U
+          aws-secret-access-key: gLHztsBg2iwy8nrcI3+CgFZMFXSA/N72SXF1A81D
           aws-region: us-east-1  # Adjust your region
+          
+     version: 0.2
 
-      # Log in to Amazon ECR
-      - name: Log in to Amazon ECR
-        run: |
-          echo Logging into ECR
-          aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 655522631902.dkr.ecr.us-east-1.amazonaws.com
+phases:
+  pre_build:
+    commands:
+      - echo Logging into ECR
+      - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 655522631902.dkr.ecr.us-east-1.amazonaws.com
+  build:
+    commands:
+      - echo Starting build at `date`
+      - echo Building the Docker image...          
+      - docker build -t github:latest .
+      - docker tag github:latest 655522631902.dkr.ecr.us-east-1.amazonaws.com/github:latest      
+  post_build:
+    commands:
+      - echo Completed build at `date`
+      - echo Pushing the Docker image...
+      - docker push 655522631902.dkr.ecr.us-east-1.amazonaws.com/github:latest
 
-      # Build and tag the Docker image
-      - name: Build Docker Image
-        run: |
-          echo Starting build at `date`
-          echo Building the Docker image...
-          docker build -t github:latest .
-          docker tag github:latest 655522631902.dkr.ecr.us-east-1.amazonaws.com/github:latest
-
-      # Push the image to ECR
-      - name: Push to ECR
-        run: |
-          echo Pushing the Docker image...
-          docker push 655522631902.dkr.ecr.us-east-1.amazonaws.com/github:latest
-
-      # Complete build process
-      - name: Complete Build
         run: |
           echo Completed build at `date`
