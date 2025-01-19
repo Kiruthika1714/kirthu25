@@ -1,29 +1,4 @@
-name: Deploy to ECR
-
-on:
-  push:
-    branches:
-      - main  # Adjust to your branch for deployment
-  workflow_dispatch:  # Allows manual triggering of the workflow
-
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-
-    steps:
-      # Checkout the repository
-      - name: Checkout Code
-        uses: actions/checkout@v3
-
-      # Set up AWS credentials
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v2
-        with:
-           aws-access-key-id: AKIAZRIBRSDPJCFSA24U
-          aws-secret-access-key: gLHztsBg2iwy8nrcI3+CgFZMFXSA/N72SXF1A81D
-          aws-region: us-east-1  # Adjust your region
-          
-     version: 0.2
+version: 0.2
 
 phases:
   pre_build:
@@ -41,6 +16,3 @@ phases:
       - echo Completed build at `date`
       - echo Pushing the Docker image...
       - docker push 655522631902.dkr.ecr.us-east-1.amazonaws.com/github:latest
-
-        run: |
-          echo Completed build at `date`
