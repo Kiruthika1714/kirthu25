@@ -9,10 +9,10 @@ phases:
     commands:
       - echo Starting build at `date`
       - echo Building the Docker image...          
-      - docker build -t kirthu25:latest .
-      - docker tag kirthu25:latest 643212820363.dkr.ecr.us-east-1.amazonaws.com/kirthu25:latest      
+      - docker build -t github:latest .
+      - docker tag github:latest 643212820363.dkr.ecr.us-east-1.amazonaws.com/github:latest      
   post_build:
     commands:
       - echo Completed build at `date`
       - echo Pushing the Docker image...
-      - docker push 643212820363.dkr.ecr.us-east-1.amazonaws.com/kirthu25:latest
+      - docker push 643212820363.dkr.ecr.us-east-1.amazonaws.com/github:latest
